@@ -13,13 +13,19 @@ val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
 
 dependencies {
+    compileOnly("org.projectlombok:lombok:1.18.34")
+    annotationProcessor("org.projectlombok:lombok:1.18.34")
+    implementation("io.quarkus:quarkus-smallrye-jwt")
+    implementation("io.quarkus:quarkus-security-jpa")
+    implementation("io.quarkus:quarkus-jdbc-postgresql")
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
     implementation("io.quarkus:quarkus-hibernate-orm")
     implementation("io.quarkus:quarkus-hibernate-validator")
     implementation("io.quarkus:quarkus-hibernate-orm-panache")
-    implementation("io.quarkus:quarkus-resteasy-client-jackson")
+    implementation("io.quarkus:quarkus-resteasy-reactive-jackson")
     implementation("io.quarkiverse.jdbc:quarkus-jdbc-sqlite:3.0.10")
     implementation("io.quarkus:quarkus-arc")
+    implementation("com.auth0:java-jwt:3.8.2")
     testImplementation("io.quarkus:quarkus-junit5")
 }
 
