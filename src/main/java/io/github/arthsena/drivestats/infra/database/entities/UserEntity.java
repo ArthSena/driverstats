@@ -25,8 +25,14 @@ public class UserEntity extends PanacheEntityBase {
 
     private User.Role role;
 
-     @OneToMany(targetEntity=CashRegistryEntity.class, cascade= CascadeType.ALL, mappedBy="owner")
-     private Set<CashRegistryEntity> registries;
+     @OneToMany(targetEntity= RegistryEntity.class, cascade= CascadeType.ALL, mappedBy="owner")
+     private Set<RegistryEntity> registries;
+
+    @OneToMany(targetEntity= ExpenseEntity.class, cascade= CascadeType.ALL, mappedBy="owner")
+    private Set<ExpenseEntity> expenses;
+
+    @OneToMany(targetEntity= ExpenseCategoryEntity.class, cascade= CascadeType.ALL, mappedBy="owner")
+    private Set<ExpenseCategoryEntity> categories;
 
     public UserEntity(String name, String email, String password) {
         this.id = UUID.randomUUID();

@@ -1,8 +1,10 @@
 package io.github.arthsena.drivestats.app.controllers.auth;
 
+import com.fasterxml.jackson.annotation.JsonRootName;
 import io.github.arthsena.drivestats.app.responses.UserResponse;
 import io.github.arthsena.drivestats.domain.models.User;
 
+@JsonRootName("auth")
 public class AuthResponse {
 
     public String token;

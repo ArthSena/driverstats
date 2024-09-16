@@ -1,40 +1,39 @@
 package io.github.arthsena.drivestats.domain.services;
 
-import io.github.arthsena.drivestats.app.controllers.cash.RegistryRequest;
+import io.github.arthsena.drivestats.app.controllers.registry.RegistryRequest;
 import io.github.arthsena.drivestats.domain.exceptions.NotFoundException;
 import io.github.arthsena.drivestats.domain.exceptions.UnauthorizedException;
-import io.github.arthsena.drivestats.domain.models.CashRegistry;
+import io.github.arthsena.drivestats.domain.models.Registry;
 import io.github.arthsena.drivestats.domain.models.User;
-import io.github.arthsena.drivestats.infra.database.entities.CashRegistryEntity;
+import io.github.arthsena.drivestats.infra.database.entities.RegistryEntity;
 import io.github.arthsena.drivestats.infra.database.repositories.UserRepository;
 import io.github.arthsena.drivestats.infra.exception.ExceptionType;
 import io.github.arthsena.drivestats.infra.security.Subject;
-import io.github.arthsena.drivestats.infra.database.repositories.CashRegistryRepository;
+import io.github.arthsena.drivestats.infra.database.repositories.RegistryRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
-public class CashRegistryService {
+public class RegistryService {
 
     @Inject UserRepository users;
-    @Inject CashRegistryRepository registries;
+    @Inject RegistryRepository registries;
 
-    public CashRegistry create(Subject subject, RegistryRequest.Create request) throws NotFoundException {
+    public Registry create(Subject subject, RegistryRequest.Create request) throws NotFoundException {
         if(!users.existsId(subject.getId())) throw new NotFoundException(ExceptionType.INVALID_SUBJECT);
-        return new CashRegistry(registries.create(subject.getId(), request.getInitialBalance(), request.getInitialMileage()));
+        return new Registry(registries.create(subject.getId(), request.getInitialMileage()));
     }
 
-    public List<CashRegistry> searchByDate(Subject subject, String minPeriod, String maxPeriod) {
+    public List<Registry> searchByDate(Subject subject, String minPeriod, String maxPeriod) {
         if (!users.existsId(subject.getId())) throw new NotFoundException(ExceptionType.INVALID_SUBJECT);
 
         return registries.findByOwnerId(subject.getId()).stream()
-                .map(CashRegistry::new)
+                .map(Registry::new)
                 .filter(registry -> {
                     var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     var createdAt = registry.getCreatedAt();
@@ -44,41 +43,40 @@ public class CashRegistryService {
                 }).toList();
     }
 
-    public List<CashRegistry> searchMonthly(Subject subject) {
+    public List<Registry> searchMonthly(Subject subject) {
         if(!users.existsId(subject.getId())) throw new NotFoundException(ExceptionType.INVALID_SUBJECT);
 
         return registries.findByOwnerId(subject.getId()).stream()
-                .map(CashRegistry::new)
+                .map(Registry::new)
                 .filter(registry -> LocalDate.now().withDayOfMonth(1).atStartOfDay().isBefore(registry.getCreatedAt()))
                 .toList();
     }
 
-    public CashRegistry close(Subject subject, UUID registryId, RegistryRequest.Close request) {
+    public Registry close(Subject subject, UUID registryId, RegistryRequest.Close request) {
         validatedEntity(subject, registryId);
 
-        return new CashRegistry(registries.close(registryId, request.getEarnedBalance(), request.getFinalMileage(), request.getTotalTrips()));
+        return new Registry(registries.close(registryId, request.getBilled(), request.getFinalMileage(), request.getTrips()));
     }
 
-    public CashRegistry update(Subject subject, UUID registryId, RegistryRequest.Update request) {
+    public Registry update(Subject subject, UUID registryId, RegistryRequest.Update request) {
         var entity = validatedEntity(subject, registryId);
 
-        if(request.getInitialBalance()  != null)    entity.setInitialBalance(request.getInitialBalance());
         if(request.getInitialMileage() != null)     entity.setInitialMileage(request.getInitialMileage());
-        if(request.getEarnedBalance() != null)      entity.setEarnedBalance(request.getEarnedBalance());
         if(request.getFinalMileage() != null)       entity.setFinalMileage(request.getFinalMileage());
-        if(request.getTotalTrips() != null)         entity.setTotalTrips(request.getTotalTrips());
+        if(request.getBilled() != null)             entity.setBilled(request.getBilled());
+        if(request.getTrips() != null)              entity.setTrips(request.getTrips());
 
-        return new CashRegistry(entity);
+        return new Registry(entity);
     }
-    public CashRegistry getById(Subject subject, UUID registryId) {
-        return new CashRegistry(validatedEntity(subject, registryId));
+    public Registry getById(Subject subject, UUID registryId) {
+        return new Registry(validatedEntity(subject, registryId));
     }
 
     public void delete(Subject subject, UUID registryId) {
         registries.delete(validatedEntity(subject, registryId));
     }
 
-    private CashRegistryEntity validatedEntity(Subject subject, UUID registryId) {
+    private RegistryEntity validatedEntity(Subject subject, UUID registryId) {
         if(!users.existsId(subject.getId()))
             throw new NotFoundException(ExceptionType.INVALID_SUBJECT);
 

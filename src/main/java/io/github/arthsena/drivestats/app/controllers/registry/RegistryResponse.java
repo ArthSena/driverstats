@@ -1,59 +1,56 @@
-package io.github.arthsena.drivestats.app.controllers.cash;
+package io.github.arthsena.drivestats.app.controllers.registry;
 
-import io.github.arthsena.drivestats.app.responses.UserResponse;
-import io.github.arthsena.drivestats.domain.models.CashRegistry;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import io.github.arthsena.drivestats.domain.models.Registry;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class RegistryResponse {
 
+    @JsonRootName("registry")
     public static class Single{
         public UUID id;
-        public UserResponse owner;
 
-        public double initialBalance;
         public double initialMileage;
-
-        public double earnedBalance;
         public double finalMileage;
-        public int totalTrips;
 
-        public CashRegistry.State state;
+        public double billed;
+        public int trips;
+
+        public Registry.State state;
 
         public String createdAt;
         public String closedAt;
 
-        public Single(CashRegistry registry) {
+        public Single(Registry registry) {
             this.id = registry.getId();
-            this.owner = new UserResponse(registry.getOwner());
-            this.initialBalance = registry.getInitialBalance();
             this.initialMileage = registry.getInitialMileage();
-            this.earnedBalance = registry.getEarnedBalance();
             this.finalMileage = registry.getFinalMileage();
-            this.totalTrips = registry.getTotalTrips();
+            this.billed = registry.getBilled();
+            this.trips = registry.getTrips();
             this.state = registry.getState();
             if(registry.getCreatedAt() != null) this.createdAt = registry.getCreatedAt().toString();
             if(registry.getClosedAt() != null) this.closedAt = registry.getClosedAt().toString();
         }
     }
 
+    @JsonRootName("registries")
     public static class Multiple {
-        public List<Single> registries;
+        public List<Single> list;
         public double totalBalance;
         public double totalMileage;
         public int totalTrips;
         public int count;
 
-        public Multiple(List<CashRegistry> registries){
-            this.registries = registries.stream().map(Single::new).collect(Collectors.toList());
+        public Multiple(List<Registry> registries){
+            this.list = registries.stream().map(Single::new).collect(Collectors.toList());
 
-            this.registries.forEach(r -> {
-                this.totalBalance += r.earnedBalance;
+            this.list.forEach(r -> {
+                this.totalBalance += r.billed;
                 this.totalMileage += r.finalMileage;
-                this.totalTrips += r.totalTrips;
+                this.totalTrips += r.trips;
             });
 
             this.count = registries.size();

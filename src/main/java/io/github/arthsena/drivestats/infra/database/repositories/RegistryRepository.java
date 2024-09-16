@@ -1,6 +1,6 @@
 package io.github.arthsena.drivestats.infra.database.repositories;
 
-import io.github.arthsena.drivestats.infra.database.entities.CashRegistryEntity;
+import io.github.arthsena.drivestats.infra.database.entities.RegistryEntity;
 import io.github.arthsena.drivestats.infra.database.entities.UserEntity;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -11,23 +11,23 @@ import java.util.UUID;
 
 @Transactional
 @ApplicationScoped
-public class CashRegistryRepository implements PanacheRepositoryBase<CashRegistryEntity, UUID> {
+public class RegistryRepository implements PanacheRepositoryBase<RegistryEntity, UUID> {
 
-    public CashRegistryEntity create(UUID ownerId, double initialBalance, double initialMileage) {
+    public RegistryEntity create(UUID ownerId, double initialMileage) {
         var owner = getEntityManager().find(UserEntity.class, ownerId);
-        CashRegistryEntity entity = new CashRegistryEntity(owner, initialBalance, initialMileage);
+        RegistryEntity entity = new RegistryEntity(owner, initialMileage);
         persistAndFlush(entity);
         return entity;
     }
 
-    public CashRegistryEntity close(UUID registryId, double earnedBalance, double finalMileage, int totalTrips) {
+    public RegistryEntity close(UUID registryId, double billed, double finalMileage, int trips) {
         var entity = findById(registryId);
-        entity.close(earnedBalance, finalMileage, totalTrips);
+        entity.close(billed, finalMileage, trips);
         entity.persistAndFlush();
         return entity;
     }
 
-    public List<CashRegistryEntity> findByOwnerId(UUID ownerId) {
+    public List<RegistryEntity> findByOwnerId(UUID ownerId) {
         return find("owner", getEntityManager().find(UserEntity.class, ownerId)).list();
     }
 

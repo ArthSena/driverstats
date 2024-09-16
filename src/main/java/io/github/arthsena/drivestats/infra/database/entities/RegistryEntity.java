@@ -1,6 +1,6 @@
 package io.github.arthsena.drivestats.infra.database.entities;
 
-import io.github.arthsena.drivestats.domain.models.CashRegistry;
+import io.github.arthsena.drivestats.domain.models.Registry;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class CashRegistryEntity extends PanacheEntityBase {
+public class RegistryEntity extends PanacheEntityBase {
 
     @Id private UUID id;
 
@@ -23,38 +23,35 @@ public class CashRegistryEntity extends PanacheEntityBase {
     @JoinColumn(name="ownerId", nullable=false)
     private UserEntity owner;
 
-    private double initialBalance;
     private double initialMileage;
-
-    private double earnedBalance;
     private double finalMileage;
-    private int totalTrips;
+    private double billed;
+    private int trips;
 
-    private CashRegistry.State state;
+    private Registry.State state;
 
     private LocalDateTime createdAt;
     private LocalDateTime closedAt;
 
-    public CashRegistryEntity(UserEntity owner, double initialBalance, double initialMileage) {
+    public RegistryEntity(UserEntity owner, double initialMileage) {
         this.id = UUID.randomUUID();
         this.owner = owner;
-        this.initialBalance = initialBalance;
         this.initialMileage = initialMileage;
-        this.earnedBalance = 0;
         this.finalMileage = 0;
-        this.totalTrips = 0;
-        this.state = CashRegistry.State.OPEN;
+        this.billed = 0;
+        this.trips = 0;
+        this.state = Registry.State.OPEN;
         this.createdAt = LocalDateTime.now();
     }
 
-    public void close(double earnedBalance, double finalMileage, int totalTrips) {
-        if(this.state != null && this.state == CashRegistry.State.CLOSED)
+    public void close(double billed, double finalMileage, int trips) {
+        if(this.state != null && this.state == Registry.State.CLOSED)
             return;
 
-        this.state = CashRegistry.State.CLOSED;
+        this.state = Registry.State.CLOSED;
         this.closedAt = LocalDateTime.now();
-        this.earnedBalance = earnedBalance;
+        this.billed = billed;
         this.finalMileage = finalMileage;
-        this.totalTrips = totalTrips;
+        this.trips = trips;
     }
 }

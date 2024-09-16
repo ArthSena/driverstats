@@ -1,6 +1,6 @@
-package io.github.arthsena.drivestats.app.controllers.cash;
+package io.github.arthsena.drivestats.app.controllers.registry;
 
-import io.github.arthsena.drivestats.domain.services.CashRegistryService;
+import io.github.arthsena.drivestats.domain.services.RegistryService;
 import io.github.arthsena.drivestats.infra.security.Subject;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -19,7 +19,7 @@ import java.util.UUID;
 public class RegistryController {
 
     @Inject
-    CashRegistryService registry;
+    RegistryService registry;
 
     @POST
     @RolesAllowed("user")
@@ -35,6 +35,7 @@ public class RegistryController {
     }
 
     @GET
+    @Path("/date")
     @RolesAllowed("user")
     public Response searchByDate(@Context SecurityContext context, @QueryParam("minPeriod") String minPeriod, @QueryParam("maxPeriod") String maxPeriod) {
         return Response.ok(new RegistryResponse.Multiple(registry.searchByDate((Subject) context.getUserPrincipal(), minPeriod, maxPeriod))).build();

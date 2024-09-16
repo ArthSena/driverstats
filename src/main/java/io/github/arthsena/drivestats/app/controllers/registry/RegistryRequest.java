@@ -1,4 +1,4 @@
-package io.github.arthsena.drivestats.app.controllers.cash;
+package io.github.arthsena.drivestats.app.controllers.registry;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -7,9 +7,6 @@ public class RegistryRequest {
 
     @Getter
     public static class Create {
-        @NotNull(message = "parameter 'initialBalance' must be not null")
-        private double initialBalance;
-
         @NotNull(message = "parameter 'initialMileage' must be not null")
         private double initialMileage;
     }
@@ -17,21 +14,20 @@ public class RegistryRequest {
     @Getter
     public static class Close {
         @NotNull(message = "parameter 'earnedBalance' must be not null")
-        private double earnedBalance;
+        private double billed;
 
         @NotNull(message = "parameter 'finalMileage' must be not null")
         private double finalMileage;
 
         @NotNull(message = "parameter 'totalTrips' must be not null")
-        private int totalTrips;
+        private int trips;
     }
 
     @Getter
     public static class Update {
-        private Double initialBalance;
         private Double initialMileage;
-        private Double earnedBalance;
         private Double finalMileage;
-        private Integer totalTrips;
+        private Double billed;
+        private Integer trips;
     }
 }
