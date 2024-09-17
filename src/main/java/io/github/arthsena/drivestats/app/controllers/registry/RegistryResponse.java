@@ -11,15 +11,15 @@ public class RegistryResponse {
 
     @JsonRootName("registry")
     public static class Single{
-        public UUID id;
+        public final UUID id;
 
-        public double initialMileage;
-        public double finalMileage;
+        public final double initialMileage;
+        public final double finalMileage;
 
-        public double billed;
-        public int trips;
+        public final double billed;
+        public final int trips;
 
-        public Registry.State state;
+        public final Registry.State state;
 
         public String createdAt;
         public String closedAt;
@@ -38,11 +38,11 @@ public class RegistryResponse {
 
     @JsonRootName("registries")
     public static class Multiple {
-        public List<Single> list;
+        public final List<Single> list;
         public double totalBalance;
         public double totalMileage;
         public int totalTrips;
-        public int count;
+        public final int count;
 
         public Multiple(List<Registry> registries){
             this.list = registries.stream().map(Single::new).collect(Collectors.toList());

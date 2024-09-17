@@ -15,18 +15,24 @@ import jakarta.inject.Inject;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
-public class RegistryService {
+public class CashRegistryService {
 
     @Inject UserRepository users;
     @Inject RegistryRepository registries;
 
-    public Registry create(Subject subject, RegistryRequest.Create request) throws NotFoundException {
+    public Registry create(Subject subject, RegistryRequest.Create request) {
         if(!users.existsId(subject.getId())) throw new NotFoundException(ExceptionType.INVALID_SUBJECT);
         return new Registry(registries.create(subject.getId(), request.getInitialMileage()));
+    }
+
+    public List<Registry> all(Subject subject) {
+        if (!users.existsId(subject.getId())) throw new NotFoundException(ExceptionType.INVALID_SUBJECT);
+        return registries.findByOwnerId(subject.getId()).stream().map(Registry::new).sorted(Comparator.comparing(Registry::getCreatedAt).reversed()).toList();
     }
 
     public List<Registry> searchByDate(Subject subject, String minPeriod, String maxPeriod) {
@@ -58,15 +64,16 @@ public class RegistryService {
         return new Registry(registries.close(registryId, request.getBilled(), request.getFinalMileage(), request.getTrips()));
     }
 
+    public Registry reopen(Subject subject, UUID registryId) {
+        validatedEntity(subject, registryId);
+
+        return new Registry(registries.reopen(registryId));
+    }
+
     public Registry update(Subject subject, UUID registryId, RegistryRequest.Update request) {
-        var entity = validatedEntity(subject, registryId);
+        validatedEntity(subject, registryId);
 
-        if(request.getInitialMileage() != null)     entity.setInitialMileage(request.getInitialMileage());
-        if(request.getFinalMileage() != null)       entity.setFinalMileage(request.getFinalMileage());
-        if(request.getBilled() != null)             entity.setBilled(request.getBilled());
-        if(request.getTrips() != null)              entity.setTrips(request.getTrips());
-
-        return new Registry(entity);
+        return new Registry(registries.update(registryId, request.getBilled(), request.getInitialMileage(), request.getFinalMileage(), request.getTrips()));
     }
     public Registry getById(Subject subject, UUID registryId) {
         return new Registry(validatedEntity(subject, registryId));

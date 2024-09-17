@@ -12,10 +12,10 @@ public class ExpenseResponse {
     @JsonRootName("expense")
     public static class Single{
 
-        public UUID id;
-        public double amount;
-        public String description;
-        public String date;
+        public final UUID id;
+        public final double amount;
+        public final String description;
+        public final String date;
         public String category;
 
         public Single(Expense expense) {
@@ -29,9 +29,9 @@ public class ExpenseResponse {
 
     @JsonRootName("expenses")
     public static class Multiple {
-        public List<Single> list;
+        public final List<Single> list;
         public double totalAmount;
-        public int count;
+        public final int count;
 
         public Multiple(List<Expense> expenses){
             this.list = expenses.stream().map(Single::new).collect(Collectors.toList());

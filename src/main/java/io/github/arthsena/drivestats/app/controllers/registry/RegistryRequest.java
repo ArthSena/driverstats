@@ -25,9 +25,9 @@ public class RegistryRequest {
 
     @Getter
     public static class Update {
+        private Double billed;
         private Double initialMileage;
         private Double finalMileage;
-        private Double billed;
         private Integer trips;
     }
 }

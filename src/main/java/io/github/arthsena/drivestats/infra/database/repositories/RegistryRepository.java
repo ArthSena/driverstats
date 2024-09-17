@@ -27,11 +27,30 @@ public class RegistryRepository implements PanacheRepositoryBase<RegistryEntity,
         return entity;
     }
 
+    public RegistryEntity update(UUID registryId, Double billed, Double initialMileage, Double finalMileage, Integer trips) {
+        var entity = findById(registryId);
+
+        if(initialMileage != null)     entity.setInitialMileage(initialMileage);
+        if(finalMileage != null)       entity.setFinalMileage(finalMileage);
+        if(billed != null)             entity.setBilled(billed);
+        if(trips != null)              entity.setTrips(trips);
+
+        entity.persistAndFlush();
+        return entity;
+    }
+
     public List<RegistryEntity> findByOwnerId(UUID ownerId) {
         return find("owner", getEntityManager().find(UserEntity.class, ownerId)).list();
     }
 
     public boolean existsById(UUID id) {
         return count("id", id) > 0;
+    }
+
+    public RegistryEntity reopen(UUID registryId) {
+        var entity = findById(registryId);
+        entity.reopen();
+        entity.persistAndFlush();
+        return entity;
     }
 }

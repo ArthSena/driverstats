@@ -7,8 +7,8 @@ import io.github.arthsena.drivestats.domain.models.User;
 @JsonRootName("auth")
 public class AuthResponse {
 
-    public String token;
-    public UserResponse user;
+    public final String token;
+    public final UserResponse user;
 
     public AuthResponse(String token, User user) {
         this.token = token;

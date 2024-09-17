@@ -1,5 +1,7 @@
 package io.github.arthsena.drivestats.domain.models;
 
+import io.github.arthsena.drivestats.infra.database.entities.ExpenseCategoryEntity;
+import io.github.arthsena.drivestats.infra.database.entities.ExpenseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -26,10 +28,20 @@ public class Expense {
         this.category = category;
     }
 
+    public Expense(ExpenseEntity entity) {
+        this(entity.getId(), new User(entity.getOwner()), entity.getDescription(), entity.getAmount(), entity.getDate(), new Category(entity.getCategory()));
+    }
+
     @Data
     @AllArgsConstructor
     public static class Category {
-        private long id;
+
+        private UUID id;
         private String name;
+        private User owner;
+
+        public Category(ExpenseCategoryEntity entity) {
+            this(entity.getId(), entity.getName(), new User(entity.getOwner()));
+        }
     }
 }

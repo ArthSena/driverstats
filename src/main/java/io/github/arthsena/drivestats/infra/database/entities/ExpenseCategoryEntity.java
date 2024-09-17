@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "drivestats-expense-categories")
 @Data
@@ -13,12 +15,18 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 public class ExpenseCategoryEntity extends PanacheEntityBase {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private long id;
+    @Id
+    private UUID id;
 
     private String name;
 
     @ManyToOne
     @JoinColumn(name="ownerId", nullable=false)
     private UserEntity owner;
+
+    public ExpenseCategoryEntity(UserEntity owner, String name) {
+        this.id = UUID.randomUUID();
+        this.owner = owner;
+        this.name = name;
+    }
 }

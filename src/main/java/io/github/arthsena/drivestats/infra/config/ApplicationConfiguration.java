@@ -10,13 +10,13 @@ import jakarta.inject.Singleton;
 
 @Dependent
 public class ApplicationConfiguration {
-
-    @Singleton
-    @Produces
-    public ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(SerializationFeature.WRAP_ROOT_VALUE);
-        objectMapper.registerModule(new JavaTimeModule());
-        return objectMapper;
-    }
+//
+//    @Singleton
+//    @Produces
+//    public ObjectMapper objectMapper() {
+////        ObjectMapper objectMapper = new ObjectMapper();
+////        objectMapper.enable(SerializationFeature.WRAP_ROOT_VALUE);
+////        objectMapper.registerModule(new JavaTimeModule());
+////        return objectMapper;
+//    }
 }

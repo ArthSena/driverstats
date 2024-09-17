@@ -1,14 +1,14 @@
 package io.github.arthsena.drivestats.infra.security;
 
-import jakarta.ws.rs.container.ResourceInfo;
 import jakarta.ws.rs.core.SecurityContext;
 import lombok.Getter;
 
 import java.security.Principal;
 
+@Getter
 public class AppContext implements SecurityContext {
 
-    @Getter private final Subject subject;
+    private final Subject subject;
 
     public AppContext(Subject subject) {
         this.subject = subject;

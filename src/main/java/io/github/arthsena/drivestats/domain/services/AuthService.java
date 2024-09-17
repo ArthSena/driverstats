@@ -2,7 +2,6 @@ package io.github.arthsena.drivestats.domain.services;
 
 import io.github.arthsena.drivestats.app.controllers.auth.AuthRequest;
 import io.github.arthsena.drivestats.domain.exceptions.BadRequestException;
-import io.github.arthsena.drivestats.domain.exceptions.ConflictException;
 import io.github.arthsena.drivestats.domain.exceptions.NotFoundException;
 import io.github.arthsena.drivestats.domain.exceptions.UnauthorizedException;
 import io.github.arthsena.drivestats.domain.models.User;

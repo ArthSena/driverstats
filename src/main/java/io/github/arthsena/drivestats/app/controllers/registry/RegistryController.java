@@ -1,6 +1,6 @@
 package io.github.arthsena.drivestats.app.controllers.registry;
 
-import io.github.arthsena.drivestats.domain.services.RegistryService;
+import io.github.arthsena.drivestats.domain.services.CashRegistryService;
 import io.github.arthsena.drivestats.infra.security.Subject;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -19,7 +19,7 @@ import java.util.UUID;
 public class RegistryController {
 
     @Inject
-    RegistryService registry;
+    CashRegistryService registry;
 
     @POST
     @RolesAllowed("user")
@@ -41,14 +41,28 @@ public class RegistryController {
         return Response.ok(new RegistryResponse.Multiple(registry.searchByDate((Subject) context.getUserPrincipal(), minPeriod, maxPeriod))).build();
     }
 
-    @PATCH
-    @Path("/{id}")
+    @GET
+    @Path("/all")
+    @RolesAllowed("user")
+    public Response all(@Context SecurityContext context) {
+        return Response.ok(new RegistryResponse.Multiple(registry.all((Subject) context.getUserPrincipal()))).build();
+    }
+
+    @POST
+    @Path("/{id}/close")
     @RolesAllowed("user")
     public Response close(@Context SecurityContext context, @Valid RegistryRequest.Close request, @PathParam("id") UUID registryId) {
         return Response.ok(new RegistryResponse.Single(registry.close((Subject) context.getUserPrincipal(), registryId, request))).build();
     }
 
-    @PUT
+    @POST
+    @Path("/{id}/reopen")
+    @RolesAllowed("user")
+    public Response close(@Context SecurityContext context, @PathParam("id") UUID registryId) {
+        return Response.ok(new RegistryResponse.Single(registry.reopen((Subject) context.getUserPrincipal(), registryId))).build();
+    }
+
+    @POST
     @Path("/{id}")
     @RolesAllowed("user")
     public Response update(@Context SecurityContext context, @Valid RegistryRequest.Update request, @PathParam("id") UUID registryId) {

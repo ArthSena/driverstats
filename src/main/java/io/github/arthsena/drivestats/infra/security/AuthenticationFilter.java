@@ -7,8 +7,6 @@ import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.container.PreMatching;
-import jakarta.ws.rs.container.ResourceInfo;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.ext.Provider;
 
@@ -22,7 +20,6 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     @Override
 	public void filter(ContainerRequestContext context) {
 	    String header = context.getHeaderString(HttpHeaders.AUTHORIZATION);
-
         String AUTH_HEADER_PREFIX = "Token ";
         if (header != null && header.startsWith(AUTH_HEADER_PREFIX)) {
 	        String token = header.replace(AUTH_HEADER_PREFIX, "");

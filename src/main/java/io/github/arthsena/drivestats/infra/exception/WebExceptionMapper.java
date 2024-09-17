@@ -32,8 +32,6 @@ public class WebExceptionMapper implements ExceptionMapper<WebException> {
     }
 
     private Response notFound(WebException exception) {
-        exception.printStackTrace();
-
         return Response.ok(response(exception))
                 .status(Response.Status.NOT_FOUND.getStatusCode())
                 .build();

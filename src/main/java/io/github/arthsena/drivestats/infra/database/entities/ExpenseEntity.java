@@ -31,4 +31,12 @@ public class ExpenseEntity extends PanacheEntityBase {
     @JoinColumn(name="ownerId", nullable=false)
     private UserEntity owner;
 
+    public ExpenseEntity(UserEntity owner, ExpenseCategoryEntity category, double amount, String description){
+        this.id = UUID.randomUUID();
+        this.owner = owner;
+        this.category = category;
+        this.amount = amount;
+        this.description = description;
+        this.date = LocalDateTime.now();
+    }
 }

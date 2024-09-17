@@ -54,4 +54,12 @@ public class RegistryEntity extends PanacheEntityBase {
         this.finalMileage = finalMileage;
         this.trips = trips;
     }
+
+    public void reopen() {
+        if(this.state != null && this.state == Registry.State.OPEN)
+            return;
+
+        this.state = Registry.State.OPEN;
+        this.closedAt = null;
+    }
 }

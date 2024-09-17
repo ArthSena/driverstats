@@ -1,7 +1,6 @@
 package io.github.arthsena.drivestats.infra.exception;
 
 import io.github.arthsena.drivestats.app.responses.ExceptionResponse;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
