@@ -31,4 +31,14 @@ public class UserRepository implements PanacheRepositoryBase<UserEntity, UUID> {
         return entity;
     }
 
+    public UserEntity update(UUID userId, String name, String email, String newPassword) {
+        var entity = findById(userId);
+
+        if(name != null)        entity.setName(name);
+        if(email != null)       entity.setEmail(email);
+        if(newPassword != null) entity.setPassword(newPassword);
+
+        entity.persistAndFlush();
+        return entity;
+    }
 }

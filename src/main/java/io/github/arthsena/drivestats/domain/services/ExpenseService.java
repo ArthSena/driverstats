@@ -6,7 +6,6 @@ import io.github.arthsena.drivestats.domain.exceptions.UnauthorizedException;
 import io.github.arthsena.drivestats.domain.models.Expense;
 import io.github.arthsena.drivestats.domain.models.User;
 import io.github.arthsena.drivestats.infra.database.entities.ExpenseEntity;
-import io.github.arthsena.drivestats.infra.database.entities.RegistryEntity;
 import io.github.arthsena.drivestats.infra.database.repositories.ExpenseCategoryRepository;
 import io.github.arthsena.drivestats.infra.database.repositories.ExpenseRepository;
 import io.github.arthsena.drivestats.infra.database.repositories.UserRepository;
@@ -26,9 +25,6 @@ public class ExpenseService {
 
     @Inject
     ExpenseRepository expenses;
-
-    @Inject
-    ExpenseCategoryRepository categories;
 
     public Expense create(Subject subject, ExpenseRequest.Create request) {
         if(!users.existsId(subject.getId())) throw new NotFoundException(ExceptionType.INVALID_SUBJECT);
