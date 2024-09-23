@@ -1,6 +1,7 @@
 package io.github.arthsena.drivestats.domain.services;
 
 import io.github.arthsena.drivestats.app.controllers.profile.ProfileRequest;
+import io.github.arthsena.drivestats.domain.exceptions.ConflictException;
 import io.github.arthsena.drivestats.domain.exceptions.ForbiddenException;
 import io.github.arthsena.drivestats.domain.exceptions.NotFoundException;
 import io.github.arthsena.drivestats.domain.models.User;
@@ -23,12 +24,12 @@ public class ProfileService {
 
         var user = users.findById(subject.getId());
 
-        if(request.getEmail() != null)
-            if(users.existsEmail(request.getEmail()))
-                throw new ForbiddenException(ExceptionType.PARAM_ALREADY_EXISTS.withPattern("email"));
+        if(!BcryptUtil.matches(request.getCurrentPassword(), user.getPassword()))
+            throw new ForbiddenException(ExceptionType.INVALID_PASSWORD);
 
-       if(request.getCurrentPassword() != null  && !BcryptUtil.matches(user.getPassword(), request.getCurrentPassword()))
-           throw new ForbiddenException(ExceptionType.INVALID_PASSWORD);
+        if(request.getEmail() != null)
+            if (users.existsEmail(request.getEmail()))
+                throw new ConflictException(ExceptionType.PARAM_ALREADY_EXISTS.withPattern("Email"));
 
         String newPassword = null;
 

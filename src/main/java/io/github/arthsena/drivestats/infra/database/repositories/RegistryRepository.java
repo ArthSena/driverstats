@@ -2,10 +2,13 @@ package io.github.arthsena.drivestats.infra.database.repositories;
 
 import io.github.arthsena.drivestats.infra.database.entities.RegistryEntity;
 import io.github.arthsena.drivestats.infra.database.entities.UserEntity;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,7 +43,18 @@ public class RegistryRepository implements PanacheRepositoryBase<RegistryEntity,
     }
 
     public List<RegistryEntity> findByOwnerId(UUID ownerId) {
-        return find("owner", getEntityManager().find(UserEntity.class, ownerId)).list();
+        return findByOwnerId(ownerId, null, null);
+    }
+    public List<RegistryEntity> findByOwnerId(UUID ownerId, Integer page, Integer limit) {
+        PanacheQuery<RegistryEntity> query = find("owner", Sort.by("createdAt").descending(), getEntityManager().find(UserEntity.class, ownerId));
+
+        if(page != null && limit != null)
+            query.page(page, limit);
+
+        return query.list();
+    }
+    public long countByOwnerId(UUID ownerId) {
+        return find("owner", getEntityManager().find(UserEntity.class, ownerId)).count();
     }
 
     public boolean existsById(UUID id) {
@@ -53,4 +67,6 @@ public class RegistryRepository implements PanacheRepositoryBase<RegistryEntity,
         entity.persistAndFlush();
         return entity;
     }
+
+
 }

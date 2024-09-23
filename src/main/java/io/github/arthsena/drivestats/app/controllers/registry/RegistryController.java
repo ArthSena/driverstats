@@ -28,13 +28,6 @@ public class RegistryController {
     }
 
     @GET
-    @Path("/monthly")
-    @RolesAllowed("user")
-    public Response searchMonthly(@Context SecurityContext context) {
-        return Response.ok(new RegistryResponse.Multiple(registry.searchMonthly((Subject) context.getUserPrincipal()))).build();
-    }
-
-    @GET
     @Path("/date")
     @RolesAllowed("user")
     public Response searchByDate(@Context SecurityContext context, @QueryParam("minPeriod") String minPeriod, @QueryParam("maxPeriod") String maxPeriod) {
@@ -44,8 +37,15 @@ public class RegistryController {
     @GET
     @Path("/all")
     @RolesAllowed("user")
+    public Response all(@Context SecurityContext context, @QueryParam("page") Integer page, @QueryParam("limit") Integer limit) {
+        return Response.ok(new RegistryResponse.Multiple(registry.all((Subject) context.getUserPrincipal(), page, limit))).build();
+    }
+
+    @GET
+    @Path("/count")
+    @RolesAllowed("user")
     public Response all(@Context SecurityContext context) {
-        return Response.ok(new RegistryResponse.Multiple(registry.all((Subject) context.getUserPrincipal()))).build();
+        return Response.ok(registry.count((Subject) context.getUserPrincipal())).build();
     }
 
     @POST

@@ -15,7 +15,6 @@ import jakarta.inject.Inject;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,10 +28,14 @@ public class CashRegistryService {
         if(!users.existsId(subject.getId())) throw new NotFoundException(ExceptionType.INVALID_SUBJECT);
         return new Registry(registries.create(subject.getId(), request.getInitialMileage()));
     }
-
-    public List<Registry> all(Subject subject) {
+    public long count(Subject subject) {
         if (!users.existsId(subject.getId())) throw new NotFoundException(ExceptionType.INVALID_SUBJECT);
-        return registries.findByOwnerId(subject.getId()).stream().map(Registry::new).sorted(Comparator.comparing(Registry::getCreatedAt).reversed()).toList();
+        return registries.countByOwnerId(subject.getId());
+    }
+
+    public List<Registry> all(Subject subject, Integer page, Integer limit) {
+        if (!users.existsId(subject.getId())) throw new NotFoundException(ExceptionType.INVALID_SUBJECT);
+        return registries.findByOwnerId(subject.getId(), page, limit).stream().map(Registry::new).toList();
     }
 
     public List<Registry> searchByDate(Subject subject, String minPeriod, String maxPeriod) {
@@ -47,15 +50,6 @@ public class CashRegistryService {
                     var isMaxPeriod = maxPeriod == null || LocalDate.parse(maxPeriod, formatter).plusDays(1).atStartOfDay().isAfter(createdAt);
                     return isMinPeriod && isMaxPeriod;
                 }).toList();
-    }
-
-    public List<Registry> searchMonthly(Subject subject) {
-        if(!users.existsId(subject.getId())) throw new NotFoundException(ExceptionType.INVALID_SUBJECT);
-
-        return registries.findByOwnerId(subject.getId()).stream()
-                .map(Registry::new)
-                .filter(registry -> LocalDate.now().withDayOfMonth(1).atStartOfDay().isBefore(registry.getCreatedAt()))
-                .toList();
     }
 
     public Registry close(Subject subject, UUID registryId, RegistryRequest.Close request) {

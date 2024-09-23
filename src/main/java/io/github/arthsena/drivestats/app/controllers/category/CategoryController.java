@@ -1,7 +1,5 @@
 package io.github.arthsena.drivestats.app.controllers.category;
 
-import io.github.arthsena.drivestats.app.controllers.expense.ExpenseRequest;
-import io.github.arthsena.drivestats.app.controllers.expense.ExpenseResponse;
 import io.github.arthsena.drivestats.domain.services.CategoryService;
 import io.github.arthsena.drivestats.infra.security.Subject;
 import jakarta.annotation.security.RolesAllowed;

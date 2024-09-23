@@ -6,7 +6,6 @@ import io.github.arthsena.drivestats.domain.exceptions.UnauthorizedException;
 import io.github.arthsena.drivestats.domain.models.Expense;
 import io.github.arthsena.drivestats.domain.models.User;
 import io.github.arthsena.drivestats.infra.database.entities.ExpenseEntity;
-import io.github.arthsena.drivestats.infra.database.repositories.ExpenseCategoryRepository;
 import io.github.arthsena.drivestats.infra.database.repositories.ExpenseRepository;
 import io.github.arthsena.drivestats.infra.database.repositories.UserRepository;
 import io.github.arthsena.drivestats.infra.exception.ExceptionType;
@@ -31,9 +30,9 @@ public class ExpenseService {
         return new Expense(expenses.create(subject.getId(), request.getCategoryId(), request.getAmount(), request.getDescription()));
     }
 
-    public List<Expense> all(Subject subject) {
+    public List<Expense> all(Subject subject, Integer page, Integer limit) {
         if (!users.existsId(subject.getId())) throw new NotFoundException(ExceptionType.INVALID_SUBJECT);
-        return expenses.findByOwnerId(subject.getId()).stream().map(Expense::new).toList();
+        return expenses.findByOwnerId(subject.getId(), page, limit).stream().map(Expense::new).toList();
     }
 
     public Expense update(Subject subject, UUID expenseId, ExpenseRequest.Update request) {

@@ -29,7 +29,7 @@ public class Expense {
     }
 
     public Expense(ExpenseEntity entity) {
-        this(entity.getId(), new User(entity.getOwner()), entity.getDescription(), entity.getAmount(), entity.getDate(), new Category(entity.getCategory()));
+        this(entity.getId(), new User(entity.getOwner()), entity.getDescription(), entity.getAmount(), entity.getDate(), (entity.getCategory() != null ? new Category(entity.getCategory()) : null));
     }
 
     @Data

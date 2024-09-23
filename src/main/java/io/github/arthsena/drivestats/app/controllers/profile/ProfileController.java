@@ -1,7 +1,5 @@
 package io.github.arthsena.drivestats.app.controllers.profile;
 
-import io.github.arthsena.drivestats.app.controllers.expense.ExpenseRequest;
-import io.github.arthsena.drivestats.app.controllers.expense.ExpenseResponse;
 import io.github.arthsena.drivestats.app.responses.UserResponse;
 import io.github.arthsena.drivestats.domain.services.ProfileService;
 import io.github.arthsena.drivestats.infra.security.Subject;
@@ -13,8 +11,6 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
-
-import java.util.UUID;
 
 @Path("/v1/profile")
 @Produces(MediaType.APPLICATION_JSON)

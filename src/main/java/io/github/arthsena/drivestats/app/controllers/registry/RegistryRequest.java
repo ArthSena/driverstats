@@ -7,19 +7,19 @@ public class RegistryRequest {
 
     @Getter
     public static class Create {
-        @NotNull(message = "parameter 'initialMileage' must be not null")
+        @NotNull(message = "Initial Mileage must be not null")
         private double initialMileage;
     }
 
     @Getter
     public static class Close {
-        @NotNull(message = "parameter 'earnedBalance' must be not null")
+        @NotNull(message = "Billed must be not null")
         private double billed;
 
-        @NotNull(message = "parameter 'finalMileage' must be not null")
+        @NotNull(message = "Final Mileage must be not null")
         private double finalMileage;
 
-        @NotNull(message = "parameter 'totalTrips' must be not null")
+        @NotNull(message = " Trips must be not null")
         private int trips;
     }
 

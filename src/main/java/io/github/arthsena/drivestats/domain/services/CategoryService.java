@@ -4,18 +4,16 @@ import io.github.arthsena.drivestats.app.controllers.category.CategoryRequest;
 import io.github.arthsena.drivestats.domain.exceptions.NotFoundException;
 import io.github.arthsena.drivestats.domain.exceptions.UnauthorizedException;
 import io.github.arthsena.drivestats.domain.models.Expense;
-import io.github.arthsena.drivestats.domain.models.Registry;
 import io.github.arthsena.drivestats.domain.models.User;
 import io.github.arthsena.drivestats.infra.database.entities.ExpenseCategoryEntity;
-import io.github.arthsena.drivestats.infra.database.entities.RegistryEntity;
 import io.github.arthsena.drivestats.infra.database.repositories.ExpenseCategoryRepository;
+import io.github.arthsena.drivestats.infra.database.repositories.ExpenseRepository;
 import io.github.arthsena.drivestats.infra.database.repositories.UserRepository;
 import io.github.arthsena.drivestats.infra.exception.ExceptionType;
 import io.github.arthsena.drivestats.infra.security.Subject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +25,9 @@ public class CategoryService {
 
     @Inject
     ExpenseCategoryRepository categories;
+
+    @Inject
+    ExpenseRepository expenses;
 
     public List<Expense.Category> all(Subject subject) {
         if (!users.existsId(subject.getId())) throw new NotFoundException(ExceptionType.INVALID_SUBJECT);
@@ -44,8 +45,8 @@ public class CategoryService {
         return new Expense.Category(categories.update(categoryId, request.getName()));
     }
 
-    public void delete(Subject subject, UUID registryId) {
-        categories.delete(validatedEntity(subject, registryId));
+    public void delete(Subject subject, UUID categoryId) {
+        categories.delete(validatedEntity(subject, categoryId));
     }
 
     private ExpenseCategoryEntity validatedEntity(Subject subject, UUID categoryId) {

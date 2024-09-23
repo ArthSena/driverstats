@@ -9,28 +9,28 @@ public class AuthRequest {
 
     @Getter
     public static class Login {
-        @NotBlank(message = "parameter 'email' must be not blank")
+        @NotBlank(message = "Email must be not blank")
         private String email;
 
-        @NotBlank(message = "parameter 'password' must be not blank")
+        @NotBlank(message = "Password must be not blank")
         private String password;
     }
 
     @Getter
     public static class Registration {
-        @NotBlank(message = "parameter 'name' must be not blank")
+        @NotBlank(message = "Name must be not blank")
         private String name;
 
-        @NotBlank(message = "parameter 'email' must be not blank")
-        @Email(message = "parameter 'email' must be an valid email address")
+        @NotBlank(message = "Email must be not blank")
+        @Email(message = "Email must be an valid email address")
         private String email;
 
-        @NotBlank(message = "parameter 'password' must be not blank")
-        @Length(min = 4, message = "parameter 'password' must be at least 4 characters")
+        @NotBlank(message = "password must be not blank")
+        @Length(min = 4, message = "password must be at least 4 characters")
         private String password;
 
-        @NotBlank(message = "parameter 'repassword' must be not blank")
-        @Length(min = 4, message = "parameter 'repassword' must be at least 4 characters")
-        private String repassword;
+        @NotBlank(message = "Confirm password must be not blank")
+        @Length(min = 4, message = "Confirm password must be at least 4 characters")
+        private String confirmPassword;
     }
 }

@@ -4,6 +4,7 @@ import io.github.arthsena.drivestats.infra.database.entities.ExpenseCategoryEnti
 import io.github.arthsena.drivestats.infra.database.entities.UserEntity;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
@@ -12,6 +13,9 @@ import java.util.UUID;
 @Transactional
 @ApplicationScoped
 public class ExpenseCategoryRepository implements PanacheRepositoryBase<ExpenseCategoryEntity, UUID> {
+
+    @Inject
+    ExpenseRepository expenses;
 
     public List<ExpenseCategoryEntity> findByOwnerId(UUID ownerId) {
         return find("owner", getEntityManager().find(UserEntity.class, ownerId)).list();
@@ -34,4 +38,15 @@ public class ExpenseCategoryRepository implements PanacheRepositoryBase<ExpenseC
         return entity;
     }
 
+    @Override
+    public void delete(ExpenseCategoryEntity entity) {
+        var exp = expenses.findByCategoryId(entity.getId());
+
+        exp.forEach((e) -> {
+            e.setCategory(null);
+            e.persistAndFlush();
+        });
+
+        PanacheRepositoryBase.super.delete(entity);
+    }
 }

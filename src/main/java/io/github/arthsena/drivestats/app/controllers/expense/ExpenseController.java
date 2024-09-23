@@ -30,11 +30,11 @@ public class ExpenseController {
     @GET
     @Path("/all")
     @RolesAllowed("user")
-    public Response all(@Context SecurityContext context) {
-        return Response.ok(new ExpenseResponse.Multiple(expense.all((Subject) context.getUserPrincipal()))).build();
+    public Response all(@Context SecurityContext context, @QueryParam("page") Integer page, @QueryParam("limit") Integer limit) {
+        return Response.ok(new ExpenseResponse.Multiple(expense.all((Subject) context.getUserPrincipal(), page, limit))).build();
     }
 
-    @PUT
+    @POST
     @Path("/{id}")
     @RolesAllowed("user")
     public Response update(@Context SecurityContext context, @PathParam("id") UUID expenseId, @Valid ExpenseRequest.Update request) {

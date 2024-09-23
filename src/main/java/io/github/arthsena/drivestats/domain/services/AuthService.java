@@ -37,7 +37,7 @@ public class AuthService {
             throw new NotFoundException(ExceptionType.PARAM_ALREADY_EXISTS.withPattern("Email"));
         }
 
-        if(!Objects.equals(request.getPassword(), request.getRepassword())){
+        if(!Objects.equals(request.getPassword(), request.getConfirmPassword())){
             throw new BadRequestException(ExceptionType.PASSWORDS_NOT_MATCH);
         }
 

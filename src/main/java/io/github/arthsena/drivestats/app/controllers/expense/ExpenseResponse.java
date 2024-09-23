@@ -1,6 +1,7 @@
 package io.github.arthsena.drivestats.app.controllers.expense;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
+import io.github.arthsena.drivestats.app.controllers.category.CategoryResponse;
 import io.github.arthsena.drivestats.domain.models.Expense;
 
 import java.util.List;
@@ -16,14 +17,14 @@ public class ExpenseResponse {
         public final double amount;
         public final String description;
         public final String date;
-        public String category;
+        public CategoryResponse.Single category;
 
         public Single(Expense expense) {
             this.id = expense.getId();
             this.amount = expense.getAmount();
             this.description = expense.getDescription();
             this.date = expense.getDate().toString();
-            if(expense.getCategory() != null) this.category = expense.getCategory().getName();
+            if(expense.getCategory() != null) this.category = new CategoryResponse.Single(expense.getCategory());
         }
     }
 

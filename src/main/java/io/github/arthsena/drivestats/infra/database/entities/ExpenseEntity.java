@@ -24,7 +24,8 @@ public class ExpenseEntity extends PanacheEntityBase {
 
     private String description;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne
+    @JoinColumn(name="categoryId", nullable=true, unique=false)
     private ExpenseCategoryEntity category;
 
     @ManyToOne
