@@ -14,10 +14,12 @@ public class CategoryResponse {
 
         public final UUID id;
         public final String name;
+        public final String color;
 
         public Single(Expense.Category category) {
             this.id = category.getId();
             this.name = category.getName();
+            this.color = category.getColor();
         }
     }
 

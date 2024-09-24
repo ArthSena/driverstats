@@ -20,13 +20,16 @@ public class ExpenseCategoryEntity extends PanacheEntityBase {
 
     private String name;
 
+    private String color;
+
     @ManyToOne
     @JoinColumn(name="ownerId", nullable=false)
     private UserEntity owner;
 
-    public ExpenseCategoryEntity(UserEntity owner, String name) {
+    public ExpenseCategoryEntity(UserEntity owner, String name, String color) {
         this.id = UUID.randomUUID();
         this.owner = owner;
         this.name = name;
+        this.color = color;
     }
 }

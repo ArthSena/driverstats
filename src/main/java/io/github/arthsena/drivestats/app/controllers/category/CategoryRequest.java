@@ -8,10 +8,13 @@ public class CategoryRequest {
     public static class Create {
         @NotBlank(message = "Name must be not blank")
         private String name;
+
+        @NotBlank(message = "Color must be not blank")
+        private String color;
     }
     @Getter
     public static class Update {
-        @NotBlank(message = "Name must be not blank")
         private String name;
+        private String color;
     }
 }

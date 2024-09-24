@@ -36,13 +36,13 @@ public class CategoryService {
 
     public Expense.Category create(Subject subject, CategoryRequest.Create request) {
         if (!users.existsId(subject.getId())) throw new NotFoundException(ExceptionType.INVALID_SUBJECT);
-        return new Expense.Category(categories.create(subject.getId(), request.getName()));
+        return new Expense.Category(categories.create(subject.getId(), request.getName(), request.getColor()));
     }
 
     public Expense.Category update(Subject subject, UUID categoryId, CategoryRequest.Update request) {
         validatedEntity(subject, categoryId);
 
-        return new Expense.Category(categories.update(categoryId, request.getName()));
+        return new Expense.Category(categories.update(categoryId, request.getName(), request.getColor()));
     }
 
     public void delete(Subject subject, UUID categoryId) {

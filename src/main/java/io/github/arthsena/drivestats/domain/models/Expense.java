@@ -38,10 +38,11 @@ public class Expense {
 
         private UUID id;
         private String name;
+        private String color;
         private User owner;
 
         public Category(ExpenseCategoryEntity entity) {
-            this(entity.getId(), entity.getName(), new User(entity.getOwner()));
+            this(entity.getId(), entity.getName(), entity.getColor(), new User(entity.getOwner()));
         }
     }
 }

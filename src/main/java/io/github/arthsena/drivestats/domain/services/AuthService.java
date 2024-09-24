@@ -7,6 +7,7 @@ import io.github.arthsena.drivestats.domain.exceptions.UnauthorizedException;
 import io.github.arthsena.drivestats.domain.models.User;
 import io.github.arthsena.drivestats.infra.database.repositories.UserRepository;
 import io.github.arthsena.drivestats.infra.exception.ExceptionType;
+import io.github.arthsena.drivestats.infra.security.Subject;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -45,4 +46,10 @@ public class AuthService {
         return new User(users.create(request.getName(), request.getEmail(), hashedPassword));
     }
 
+    public User refresh(Subject subject) {
+        if(!users.existsId(subject.getId()))
+            throw new NotFoundException(ExceptionType.INVALID_SUBJECT);
+
+        return new User(users.findById(subject.getId()));
+    }
 }

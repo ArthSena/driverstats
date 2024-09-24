@@ -21,8 +21,8 @@ public class ExpenseCategoryRepository implements PanacheRepositoryBase<ExpenseC
         return find("owner", getEntityManager().find(UserEntity.class, ownerId)).list();
     }
 
-    public ExpenseCategoryEntity create(UUID ownerId, String name) {
-        ExpenseCategoryEntity entity = new ExpenseCategoryEntity(getEntityManager().find(UserEntity.class, ownerId), name);
+    public ExpenseCategoryEntity create(UUID ownerId, String name, String color) {
+        ExpenseCategoryEntity entity = new ExpenseCategoryEntity(getEntityManager().find(UserEntity.class, ownerId), name, color);
         persistAndFlush(entity);
         return entity;
     }
@@ -31,9 +31,12 @@ public class ExpenseCategoryRepository implements PanacheRepositoryBase<ExpenseC
         return count("id", id) > 0;
     }
 
-    public ExpenseCategoryEntity update(UUID id, String name) {
+    public ExpenseCategoryEntity update(UUID id, String name, String color) {
         ExpenseCategoryEntity entity = findById(id);
-        entity.setName(name);
+        if(name != null)
+            entity.setName(name);
+        if(color != null)
+            entity.setColor(color);
         entity.persistAndFlush();
         return entity;
     }
