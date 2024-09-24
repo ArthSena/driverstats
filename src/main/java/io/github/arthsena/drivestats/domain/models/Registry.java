@@ -3,10 +3,12 @@ package io.github.arthsena.drivestats.domain.models;
 import io.github.arthsena.drivestats.infra.database.entities.RegistryEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Slf4j
 @Data
 @AllArgsConstructor
 public class Registry {

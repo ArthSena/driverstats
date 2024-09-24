@@ -8,6 +8,7 @@ public enum ExceptionType {
     PARAM_NOT_FOUND(2000, "A requested param", "%s was not found"),
     PARAM_ALREADY_EXISTS(2001, "A requested param", "%s already exists"),
     ENTITY_NOT_FOUND(2003, "Entity", "%s was not found"),
+    ENTITY_CONFLICT(2004, "Entity", "%s already Exists"),
 
     PASSWORDS_NOT_MATCH(2100, "", "Passwords do not match"),
 

@@ -1,6 +1,7 @@
 package io.github.arthsena.drivestats.domain.services;
 
 import io.github.arthsena.drivestats.app.controllers.registry.RegistryRequest;
+import io.github.arthsena.drivestats.domain.exceptions.ConflictException;
 import io.github.arthsena.drivestats.domain.exceptions.NotFoundException;
 import io.github.arthsena.drivestats.domain.exceptions.UnauthorizedException;
 import io.github.arthsena.drivestats.domain.models.Registry;
@@ -26,6 +27,12 @@ public class CashRegistryService {
 
     public Registry create(Subject subject, RegistryRequest.Create request) {
         if(!users.existsId(subject.getId())) throw new NotFoundException(ExceptionType.INVALID_SUBJECT);
+
+        var all = all(subject, null, null);
+
+        if(all.stream().anyMatch((r) -> r.getState() == Registry.State.OPEN))
+            throw new ConflictException(ExceptionType.ENTITY_CONFLICT.withMessage("It has an open registry. Close all Registries before creating a new registry"));
+
         return new Registry(registries.create(subject.getId(), request.getInitialMileage()));
     }
     public long count(Subject subject) {

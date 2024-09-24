@@ -62,4 +62,5 @@ public class RegistryEntity extends PanacheEntityBase {
         this.state = Registry.State.OPEN;
         this.closedAt = null;
     }
+
 }
